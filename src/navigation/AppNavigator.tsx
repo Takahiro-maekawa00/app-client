@@ -10,7 +10,14 @@ import SettingsScreen from '@screens/SettingsScreen';
 
 export type RootStackParamList = {
   Home: undefined;
-  Editor: { id?: string } | undefined;
+  Editor:
+    | {
+        id?: string;
+        shape?: 'circle' | 'rectangle' | 'custom';
+        width?: number;
+        height?: number;
+      }
+    | undefined;
   Guide: undefined;
   Preview: undefined;
   ARPreview: undefined;

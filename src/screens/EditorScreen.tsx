@@ -8,7 +8,7 @@ type EditorRouteProp = RouteProp<RootStackParamList, 'Editor'>;
 
 export default function EditorScreen() {
   const route = useRoute<EditorRouteProp>();
-  const { id } = route.params || {};
+  const { id, shape, width, height } = route.params || {};
 
   const onImageSelected = (uri: string) => {
     console.log('Selected image:', uri);
@@ -54,6 +54,11 @@ export default function EditorScreen() {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Editor Screen</Text>
       {id && <Text>Design ID: {id}</Text>}
+      {shape && (
+        <Text>
+          Shape: {shape} ({width}x{height})
+        </Text>
+      )}
       <Button title="Add Image" onPress={handleAddImage} />
     </View>
   );
