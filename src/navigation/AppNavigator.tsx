@@ -13,7 +13,7 @@ export type RootStackParamList = {
   Editor: { id?: string } | undefined;
   Guide: undefined;
   Preview: undefined;
-  ARPreview: undefined;
+  ARPreview: { designUri?: string } | undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
