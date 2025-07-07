@@ -14,6 +14,7 @@ import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@navigation/AppNavigator';
 import useOfflineStorage from '@hooks/useOffline';
+import SizeSelectorModal, { ShapeType } from '@components/SizeSelectorModal';
 
 interface DesignItem {
   id: string;
@@ -25,6 +26,7 @@ export default function DashboardScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [designs, setDesigns] = useState<DesignItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const {
     data: cachedDesigns,
     save: saveCachedDesigns,
@@ -54,6 +56,11 @@ export default function DashboardScreen() {
     fetchDesigns();
   }, [saveCachedDesigns]);
 
+  const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
+    setModalVisible(false);
+    navigation.navigate('Editor', params);
+  };
+
   const renderItem = ({ item }: { item: DesignItem }) => (
     <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Editor', { id: item.id })}>
       <Image source={{ uri: item.thumbnailUrl }} style={styles.thumb} />
@@ -75,8 +82,13 @@ export default function DashboardScreen() {
         />
       )}
       <View style={styles.createButton}>
-        <Button title="Create New Design" onPress={() => navigation.navigate('Editor')} />
+        <Button title="Create New Design" onPress={() => setModalVisible(true)} />
       </View>
+      <SizeSelectorModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSelect={handleCreate}
+      />
     </View>
   );
 }
