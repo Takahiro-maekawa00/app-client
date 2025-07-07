@@ -33,6 +33,6 @@
     "@types/jest": "^29.5.2",
     "@types/react-native": "^0.73.11",
     "@commitlint/cli": "^18.4.0",
-    "@commitlint/config-conventional": "^18.4.0",
+    "@commitlint/config-conventional": "^18.4.0"
   }
 }
