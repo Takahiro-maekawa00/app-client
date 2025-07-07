@@ -50,10 +50,11 @@ export default function DashboardScreen() {
     fetchDesigns();
   }, [saveCachedDesigns]);
 
-  const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
-    setModalVisible(false);
-    navigation.navigate('Editor', params);
-  };
+  useEffect(() => {
+    if (!offlineLoading && cachedDesigns && designs.length === 0) {
+      setDesigns(cachedDesigns);
+    }
+  }, [cachedDesigns, offlineLoading, designs.length]);
 
   const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
     setModalVisible(false);
