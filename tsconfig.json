@@ -19,7 +19,8 @@
       "@utils/*": ["src/utils/*"],
       "@services/*": ["src/services/*"],
       "@navigation/*": ["src/navigation/*"],
-      "@atoms/*": ["src/atoms/*"]
+      "@atoms/*": ["src/atoms/*"],
+      "@i18n/*": ["src/i18n/*"]
     }
   },
   "include": ["src"],

@@ -7,6 +7,7 @@ import EditorScreen from '@screens/EditorScreen';
 import GuideScreen from '@screens/GuideScreen';
 import PreviewScreen from '@screens/PreviewScreen';
 import ARPreviewScreen from '@screens/ARPreviewScreen';
+import SettingsScreen from '@screens/SettingsScreen';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -14,6 +15,7 @@ export type RootStackParamList = {
   Guide: undefined;
   Preview: undefined;
   ARPreview: undefined;
+  Settings: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -28,6 +30,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Guide" component={GuideScreen} />
         <Stack.Screen name="Preview" component={PreviewScreen} />
         <Stack.Screen name="ARPreview" component={ARPreviewScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
