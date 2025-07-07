@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, Button, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, View, Text, Button, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
-export type ShapeOption = 'circle' | 'rectangle' | 'custom';
+export type ShapeType = 'circle' | 'rectangle' | 'custom';
 
 interface SizeSelectorModalProps {
   visible: boolean;
   onClose: () => void;
-  onSelect: (shape: ShapeOption, width: number, height: number) => void;
+  onSelect: (params: { shape: ShapeType; width: number; height: number }) => void;
 }
 
 const DEFAULT_CIRCLE_SIZE = 200;
@@ -14,19 +14,19 @@ const DEFAULT_RECT_WIDTH = 200;
 const DEFAULT_RECT_HEIGHT = 150;
 
 export default function SizeSelectorModal({ visible, onClose, onSelect }: SizeSelectorModalProps) {
-  const [shape, setShape] = useState<ShapeOption>('circle');
+  const [shape, setShape] = useState<ShapeType>('circle');
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
 
   const handleSelect = () => {
     if (shape === 'circle') {
-      onSelect('circle', DEFAULT_CIRCLE_SIZE, DEFAULT_CIRCLE_SIZE);
+      onSelect({ shape, width: DEFAULT_CIRCLE_SIZE, height: DEFAULT_CIRCLE_SIZE });
     } else if (shape === 'rectangle') {
-      onSelect('rectangle', DEFAULT_RECT_WIDTH, DEFAULT_RECT_HEIGHT);
+      onSelect({ shape, width: DEFAULT_RECT_WIDTH, height: DEFAULT_RECT_HEIGHT });
     } else {
       const w = parseInt(width, 10) || 0;
       const h = parseInt(height, 10) || 0;
-      onSelect('custom', w, h);
+      onSelect({ shape, width: w, height: h });
     }
     onClose();
   };
@@ -37,7 +37,7 @@ export default function SizeSelectorModal({ visible, onClose, onSelect }: SizeSe
         <View style={styles.container}>
           <Text style={styles.title}>Select Size</Text>
           <View style={styles.options}>
-            {(['circle', 'rectangle', 'custom'] as ShapeOption[]).map((opt) => (
+            {(['circle', 'rectangle', 'custom'] as ShapeType[]).map((opt) => (
               <TouchableOpacity
                 key={opt}
                 style={[styles.option, shape === opt && styles.selectedOption]}
@@ -50,24 +50,24 @@ export default function SizeSelectorModal({ visible, onClose, onSelect }: SizeSe
           {shape === 'custom' && (
             <View style={styles.inputs}>
               <TextInput
-                placeholder="Width"
+                style={styles.input}
+                keyboardType="numeric"
                 value={width}
                 onChangeText={setWidth}
-                keyboardType="numeric"
-                style={styles.input}
+                placeholder="Width"
               />
               <TextInput
-                placeholder="Height"
+                style={styles.input}
+                keyboardType="numeric"
                 value={height}
                 onChangeText={setHeight}
-                keyboardType="numeric"
-                style={styles.input}
+                placeholder="Height"
               />
             </View>
           )}
           <View style={styles.actions}>
             <Button title="Cancel" onPress={onClose} />
-            <Button title="OK" onPress={handleSelect} />
+            <Button title="Create" onPress={handleSelect} />
           </View>
         </View>
       </View>
@@ -78,9 +78,9 @@ export default function SizeSelectorModal({ visible, onClose, onSelect }: SizeSe
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   container: {
     width: '80%',
@@ -88,31 +88,16 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
   },
-  title: {
-    fontSize: 18,
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  options: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 12,
-  },
+  title: { fontSize: 18, marginBottom: 12, textAlign: 'center' },
+  options: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 12 },
   option: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    padding: 8,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
   },
-  selectedOption: {
-    backgroundColor: '#eee',
-  },
-  inputs: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
+  selectedOption: { backgroundColor: '#def' },
+  inputs: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
   input: {
     flex: 1,
     borderWidth: 1,
@@ -121,9 +106,5 @@ const styles = StyleSheet.create({
     padding: 8,
     marginHorizontal: 4,
   },
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
+  actions: { flexDirection: 'row', justifyContent: 'space-between' },
 });
-
