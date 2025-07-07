@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet, Button, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@navigation/AppNavigator';
+import useOfflineStorage from '@hooks/useOffline';
 
 interface DesignItem {
   id: string;
@@ -15,6 +25,17 @@ export default function DashboardScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [designs, setDesigns] = useState<DesignItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const {
+    data: cachedDesigns,
+    save: saveCachedDesigns,
+    loading: offlineLoading,
+  } = useOfflineStorage<DesignItem[]>('designs');
+
+  useEffect(() => {
+    if (cachedDesigns) {
+      setDesigns(cachedDesigns);
+    }
+  }, [cachedDesigns]);
 
   useEffect(() => {
     const fetchDesigns = async () => {
@@ -22,6 +43,7 @@ export default function DashboardScreen() {
       try {
         const response = await axios.get<DesignItem[]>('/designs');
         setDesigns(response.data);
+        saveCachedDesigns(response.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -30,7 +52,7 @@ export default function DashboardScreen() {
     };
 
     fetchDesigns();
-  }, []);
+  }, [saveCachedDesigns]);
 
   const renderItem = ({ item }: { item: DesignItem }) => (
     <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Editor', { id: item.id })}>
@@ -41,7 +63,7 @@ export default function DashboardScreen() {
 
   return (
     <View style={styles.container}>
-      {loading ? (
+      {(loading || offlineLoading) && designs.length === 0 ? (
         <ActivityIndicator size="large" />
       ) : (
         <FlatList
