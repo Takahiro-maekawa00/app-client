@@ -18,7 +18,7 @@ export type RootStackParamList = {
         height?: number;
       }
     | undefined;
-  Guide: undefined;
+  Guide: { width?: number; height?: number; beadSize?: number } | undefined;
   Preview: undefined;
   ARPreview: undefined;
   Settings: undefined;

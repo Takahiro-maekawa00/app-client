@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Linking, Share } from 'react-native';
+import { View, Button, Linking, Share } from 'react-native';
 import QrCodeButton from '@components/QrCodeButton';
 import { exportToPdf, Layer } from '@services/exportService';
 
