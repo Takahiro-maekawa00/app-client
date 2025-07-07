@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@navigation/AppNavigator';
 import { useRecoilValue } from 'recoil';
 import { designState } from '@atoms/design';
 import i18n from '@i18n/index';
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const designs = useRecoilValue(designState);
 
   return (
@@ -19,7 +21,7 @@ export default function HomeScreen() {
       />
       <Button
         title={i18n.t('new_design')}
-        onPress={() => navigation.navigate('Editor' as never)}
+        onPress={() => navigation.navigate('Editor')}
       />
     </View>
   );
