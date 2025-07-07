@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@navigation/AppNavigator';
+import useOfflineStorage from '@hooks/useOffline';
 import SizeSelectorModal, { ShapeType } from '@components/SizeSelectorModal';
 
 interface DesignItem {
@@ -26,6 +27,11 @@ export default function DashboardScreen() {
   const [designs, setDesigns] = useState<DesignItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const {
+    data: cachedDesigns,
+    save: saveCachedDesigns,
+    loading: offlineLoading,
+  } = useOfflineStorage<DesignItem[]>('designs');
 
   useEffect(() => {
     const fetchDesigns = async () => {
@@ -33,6 +39,7 @@ export default function DashboardScreen() {
       try {
         const response = await axios.get<DesignItem[]>('/designs');
         setDesigns(response.data);
+        saveCachedDesigns(response.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -41,7 +48,12 @@ export default function DashboardScreen() {
     };
 
     fetchDesigns();
-  }, []);
+  }, [saveCachedDesigns]);
+
+  const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
+    setModalVisible(false);
+    navigation.navigate('Editor', params);
+  };
 
   const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
     setModalVisible(false);
@@ -57,7 +69,7 @@ export default function DashboardScreen() {
 
   return (
     <View style={styles.container}>
-      {loading ? (
+      {(loading || offlineLoading) && designs.length === 0 ? (
         <ActivityIndicator size="large" />
       ) : (
         <FlatList
