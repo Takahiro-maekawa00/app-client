@@ -9,11 +9,11 @@ type EditorRouteProp = RouteProp<RootStackParamList, 'Editor'>;
 
 export default function EditorScreen() {
   const route = useRoute<EditorRouteProp>();
-  const { id } = route.params || {};
+  const { id, shape, width, height } = route.params || {};
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const designWidth = 210;
-  const designHeight = 297;
+  const designWidth = width ?? 210;
+  const designHeight = height ?? 297;
   const beadSize = 5;
 
   const onImageSelected = (uri: string) => {
@@ -60,6 +60,11 @@ export default function EditorScreen() {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Editor Screen</Text>
       {id && <Text>Design ID: {id}</Text>}
+      {shape && (
+        <Text>
+          Shape: {shape} ({designWidth}x{designHeight})
+        </Text>
+      )}
       <Button title="Add Image" onPress={handleAddImage} />
       <Button
         title="View Bead Guide"
