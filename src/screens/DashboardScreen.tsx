@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet, Button, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@navigation/AppNavigator';
+import SizeSelectorModal, { ShapeType } from '@components/SizeSelectorModal';
 
 interface DesignItem {
   id: string;
@@ -15,6 +25,7 @@ export default function DashboardScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [designs, setDesigns] = useState<DesignItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchDesigns = async () => {
@@ -31,6 +42,11 @@ export default function DashboardScreen() {
 
     fetchDesigns();
   }, []);
+
+  const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
+    setModalVisible(false);
+    navigation.navigate('Editor', params);
+  };
 
   const renderItem = ({ item }: { item: DesignItem }) => (
     <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Editor', { id: item.id })}>
@@ -53,8 +69,13 @@ export default function DashboardScreen() {
         />
       )}
       <View style={styles.createButton}>
-        <Button title="Create New Design" onPress={() => navigation.navigate('Editor')} />
+        <Button title="Create New Design" onPress={() => setModalVisible(true)} />
       </View>
+      <SizeSelectorModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSelect={handleCreate}
+      />
     </View>
   );
 }
