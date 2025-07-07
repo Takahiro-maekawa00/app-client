@@ -34,12 +34,6 @@ export default function DashboardScreen() {
   } = useOfflineStorage<DesignItem[]>('designs');
 
   useEffect(() => {
-    if (cachedDesigns) {
-      setDesigns(cachedDesigns);
-    }
-  }, [cachedDesigns]);
-
-  useEffect(() => {
     const fetchDesigns = async () => {
       setLoading(true);
       try {
@@ -55,6 +49,11 @@ export default function DashboardScreen() {
 
     fetchDesigns();
   }, [saveCachedDesigns]);
+
+  const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
+    setModalVisible(false);
+    navigation.navigate('Editor', params);
+  };
 
   const handleCreate = (params: { shape: ShapeType; width: number; height: number }) => {
     setModalVisible(false);
