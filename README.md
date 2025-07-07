@@ -11,3 +11,13 @@ npm install
 npm run start
 ```
 
+## Commit Message Guidelines
+
+Summarize your changes in the commit message. Use a short prefix such as `feat`, `fix`, or `docs` followed by a brief description of what was done, for example:
+
+```text
+feat: implement size selector modal
+```
+
+Commit messages are checked in CI with [commitlint](https://commitlint.js.org/).
+
