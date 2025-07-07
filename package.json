@@ -26,6 +26,8 @@
     "expo-image-picker": "^15.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@types/react": "^18.2.48",
+    "@types/react-native": "^0.73.11"
   }
 }
