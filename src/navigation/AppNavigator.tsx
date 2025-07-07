@@ -11,7 +11,7 @@ import SettingsScreen from '@screens/SettingsScreen';
 export type RootStackParamList = {
   Home: undefined;
   Editor: { id?: string } | undefined;
-  Guide: undefined;
+  Guide: { width?: number; height?: number; beadSize?: number } | undefined;
   Preview: undefined;
   ARPreview: undefined;
   Settings: undefined;

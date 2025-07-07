@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Button, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@navigation/AppNavigator';
 
 type EditorRouteProp = RouteProp<RootStackParamList, 'Editor'>;
@@ -9,6 +10,11 @@ type EditorRouteProp = RouteProp<RootStackParamList, 'Editor'>;
 export default function EditorScreen() {
   const route = useRoute<EditorRouteProp>();
   const { id } = route.params || {};
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const designWidth = 210;
+  const designHeight = 297;
+  const beadSize = 5;
 
   const onImageSelected = (uri: string) => {
     console.log('Selected image:', uri);
@@ -55,6 +61,16 @@ export default function EditorScreen() {
       <Text>Editor Screen</Text>
       {id && <Text>Design ID: {id}</Text>}
       <Button title="Add Image" onPress={handleAddImage} />
+      <Button
+        title="View Bead Guide"
+        onPress={() =>
+          navigation.navigate('Guide', {
+            width: designWidth,
+            height: designHeight,
+            beadSize,
+          })
+        }
+      />
     </View>
   );
 }
