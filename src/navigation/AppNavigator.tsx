@@ -2,7 +2,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DashboardScreen from '@screens/DashboardScreen';
-import HomeScreen from '@screens/HomeScreen';
 import EditorScreen from '@screens/EditorScreen';
 import GuideScreen from '@screens/GuideScreen';
 import PreviewScreen from '@screens/PreviewScreen';
@@ -25,7 +24,6 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={DashboardScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Editor" component={EditorScreen} />
         <Stack.Screen name="Guide" component={GuideScreen} />
         <Stack.Screen name="Preview" component={PreviewScreen} />
